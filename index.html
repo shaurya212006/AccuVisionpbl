@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccuVision - PBL Presentation | 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #60a5fa, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* TIMER UI */
+        #timerContainer {
+            background: #ffffff;
+            color: #020617;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border: 3px solid #3b82f6;
+            z-index: 1000;
+        }
+        @keyframes flicker {
+            0%, 100% { background-color: #ffffff; }
+            50% { background-color: #fca5a5; }
+        }
+        .timer-warning {
+            animation: flicker 1s infinite;
+            border: 3px solid #ef4444 !important;
+            color: #b91c1c !important;
+        }
+        .timer-stop {
+            background-color: #991b1b !important;
+            color: #ffffff !important;
+            border: 3px solid #f87171 !important;
+            animation: none;
+        }
+    </style>
+</head>
+<body onload="startTimer()">
+
+    <!-- TIMER -->
+       <div id="timerContainer"
+         class="fixed bottom-10 right-10 px-8 py-4 rounded-3xl flex items-center gap-4 transition-all">
+        <i class="fas fa-hourglass-start text-blue-600 text-2xl" id="timerIcon"></i>
+        <span id="displayTime" class="text-4xl font-black font-mono tracking-tighter">00:00</span>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed w-full z-50 glass border-b border-slate-800/50 px-8 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="bg-white p-1 rounded flex items-center justify-center shadow-md"
+                 style="height: 48px; width: 48px;">
+                <img src="mujlogo.jpg" alt="MUJ"
+                     class="h-full w-auto object-contain"
+                     onerror="this.src='https://via.placeholder.com/50?text=MUJ'">
+            </div>
+            <div class="flex flex-col text-left">
+                <span class="text-xl font-black text-white leading-none uppercase tracking-tighter">
+                    PBL <span class="text-blue-500 italic">2026</span>
+                </span>
+                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                    Dept. of Computer Science & Engineering
+                </span>
+            </div>
+        </div>
+        <div class="hidden md:flex gap-8 text-[11px] uppercase tracking-widest font-bold opacity-70">
+            <a href="#problem" class="hover:text-blue-400 transition">Problem</a>
+            <a href="#methodology" class="hover:text-blue-400 transition">Methodology</a>
+            <a href="#results" class="hover:text-blue-400 transition">Results</a>
+            <a href="#team" class="hover:text-blue-400 transition">Team</a>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="max-w-6xl mx-auto px-6 pt-48 pb-32 space-y-32">
+
+        <!-- HERO -->
+        <section class="text-center">
+            <div class="inline-block px-4 py-1 border border-slate-800 rounded-full text-slate-500 text-[10px] font-mono mb-6 uppercase tracking-widest">
+                ID: CSE2427030330 | CSE2427030357
+            </div>
+            <h1 class="text-6xl md:text-7xl font-extrabold mb-8 uppercase leading-tight">
+                <span class="gradient-text uppercase">AccuVision</span>
+            </h1>
+            <p class="text-xl text-slate-300 mb-4 font-semibold">
+                AI-based Smartphone Eye Power Screening System
+            </p>
+            <p class="text-slate-400 max-w-3xl mx-auto italic text-lg leading-relaxed border-l-2 border-blue-500/30 pl-6 text-left">
+                "We hypothesize that combining smartphone camera imaging with deep learning-based pupil segmentation and optical modeling can create a reliable screening tool that estimates refractive errors with an accuracy of ±0.25 diopters under ideal conditions, making preliminary eye screening accessible to billions."
+            </p>
+
+            <!-- ABOUT PROJECT BLOCK -->
+            <div class="mt-8 max-w-3xl mx-auto glass rounded-3xl p-6 text-left">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-3">
+                    About This Project
+                </h2>
+                <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside">
+                    <li>Smartphone app that estimates eye power (spherical equivalent) using camera + AI + optics.</li>
+                    <li>Designed for adults (18–65 years) as a quick pre‑check before visiting an eye care professional.</li>
+                    <li>Internal simulations target ±0.25D agreement with clinical autorefractors under ideal conditions.</li>
+                    <li>Academic prototype (v0.1.0-pre-dev); clinical validation and regulatory approvals are pending.</li>
+                </ul>
+            </div>
+
+            <div class="mt-8 inline-block px-6 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-bold uppercase tracking-wider">
+                <i class="fas fa-shield-alt mr-2"></i>
+                Screening Tool Only – Not a Diagnostic Device
+            </div>
+        </section>
+
+        <!-- PROBLEM / REVIEW / GAP -->
+        <section id="problem" class="grid md:grid-cols-2 gap-12 items-stretch">
+            <div class="glass p-10 rounded-[2.5rem] flex flex-col justify-center border-l-4 border-blue-600">
+                <h2 class="text-3xl font-extrabold mb-6">Problem Statement</h2>
+                <p class="text-slate-400 leading-relaxed text-justify mb-4">
+                    Uncorrected refractive errors affect billions of people worldwide, reducing productivity, education
+                    outcomes, and quality of life. Regular eye examinations require clinical equipment, trained staff,
+                    and physical visits, which are often inaccessible or expensive in rural and low‑resource settings.
+                </p>
+                <ul class="text-sm text-slate-500 space-y-2 list-disc list-inside">
+                    <li><strong class="text-slate-400">Limited Access:</strong> Few trained eye‑care professionals in remote areas.</li>
+                    <li><strong class="text-slate-400">High Cost:</strong> Autorefractors and diagnostic devices cost thousands of dollars.</li>
+                    <li><strong class="text-slate-400">Low Awareness:</strong> Many people live with blur without realizing they need correction.</li>
+                    <li><strong class="text-slate-400">Time Constraints:</strong> Busy schedules and travel make routine checkups rare.</li>
+                </ul>
+                <p class="text-blue-400 font-semibold mt-4 text-sm">
+                    → There is a need for a low‑cost, smartphone‑based, preliminary screening solution.
+                </p>
+            </div>
+            <div class="space-y-6">
+                <div class="glass p-7 rounded-3xl border-r-4 border-blue-500/50">
+                    <h3 class="text-blue-400 font-bold text-xs uppercase tracking-widest mb-3">
+                        Literature Review / Market Research
+                    </h3>
+                    <p class="text-sm text-slate-400 mb-3"><strong>Existing Solutions:</strong></p>
+                    <ul class="text-xs text-slate-500 space-y-1 list-disc list-inside">
+                        <li>Traditional autorefractors (clinic‑grade, expensive, non‑portable).</li>
+                        <li>Hand‑held screening devices (Plusoptix, 2WIN) that still require specialised hardware.</li>
+                        <li>Consumer apps that often depend on external attachments or lack transparent accuracy data.</li>
+                        <li>Research prototypes using CNNs / U‑Net for iris and pupil segmentation with good performance.</li>
+                    </ul>
+                    <p class="text-xs text-slate-500 mt-3 italic">
+                        Vision care is a multi‑billion‑dollar global market, while smartphone penetration continues to grow,
+                        especially in emerging economies.
+                    </p>
+                </div>
+                <div class="glass p-7 rounded-3xl border-r-4 border-purple-500/50">
+                    <h3 class="text-purple-400 font-bold text-xs uppercase tracking-widest mb-3">
+                        Research Gap / Innovation
+                    </h3>
+                    <p class="text-sm text-slate-400 mb-2"><strong>Our Unique Approach:</strong></p>
+                    <ul class="text-xs text-slate-500 space-y-1">
+                        <li>✓ <strong class="text-purple-300">Zero Extra Hardware:</strong> Works with a standard smartphone camera.</li>
+                        <li>✓ <strong class="text-purple-300">Hybrid AI + Optics:</strong> U‑Net segmentation combined with an optical model.</li>
+                        <li>✓ <strong class="text-purple-300">Multi‑Meridian Strategy:</strong> Simulated ~50% reduction in noise through averaging.</li>
+                        <li>✓ <strong class="text-purple-300">Temporal 1D CNN:</strong> Uses 30‑frame sequences to refine the optics‑only estimate.</li>
+                        <li>✓ <strong class="text-purple-300">Device Calibration:</strong> Per‑device constants to adapt the same model to different phones.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- METHODOLOGY -->
+        <section id="methodology" class="space-y-12">
+            <h2 class="text-4xl font-black text-center uppercase tracking-tight">
+                System <span class="text-blue-500">Methodology</span>
+            </h2>
+
+            <div class="glass p-8 rounded-3xl mb-8">
+                <h3 class="text-blue-400 font-bold text-sm uppercase tracking-widest mb-4 text-center">
+                    Processing Pipeline
+                </h3>
+                <div class="flex flex-wrap justify-center items-center gap-3 text-xs">
+                    <div class="px-4 py-2 bg-blue-500/20 rounded-lg border border-blue-500/30">Camera Capture</div>
+                    <i class="fas fa-arrow-right text-slate-600"></i>
+                    <div class="px-4 py-2 bg-blue-500/20 rounded-lg border border-blue-500/30">Preprocessing (256×256)</div>
+                    <i class="fas fa-arrow-right text-slate-600"></i>
+                    <div class="px-4 py-2 bg-purple-500/20 rounded-lg border border-purple-500/30">U‑Net Segmentation</div>
+                    <i class="fas fa-arrow-right text-slate-600"></i>
+                    <div class="px-4 py-2 bg-purple-500/20 rounded-lg border border-purple-500/30">Feature Extraction</div>
+                    <i class="fas fa-arrow-right text-slate-600"></i>
+                    <div class="px-4 py-2 bg-green-500/20 rounded-lg border border-green-500/30">Optical Model</div>
+                    <i class="fas fa-arrow-right text-slate-600"></i>
+                    <div class="px-4 py-2 bg-green-500/20 rounded-lg border border-green-500/30">1D CNN Refinement</div>
+                    <i class="fas fa-arrow-right text-slate-600"></i>
+                    <div class="px-4 py-2 bg-amber-500/20 rounded-lg border border-amber-500/30">Multi‑Meridian Fusion</div>
+                    <i class="fas fa-arrow-right text-slate-600"></i>
+                    <div class="px-4 py-2 bg-amber-500/20 rounded-lg border border-amber-500/30 font-bold">Final Estimate</div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-3xl text-center">
+                    <i class="fas fa-database text-blue-500 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-3 uppercase text-xs tracking-widest">Dataset / Input</h3>
+                    <ul class="text-sm text-slate-400 space-y-2 text-left">
+                        <li><strong class="text-blue-400">Training:</strong> Synthetic eye images for segmentation and refraction; MNIST for ML pipeline sanity checks.</li>
+                        <li><strong class="text-blue-400">Augmentation:</strong> Rotation, scaling, brightness, and noise to simulate real capture conditions.</li>
+                        <li><strong class="text-blue-400">Runtime Input:</strong> 256×256 eye crops captured from the smartphone camera.</li>
+                        <li><strong class="text-blue-400">Capture Setup:</strong> 3–5 images per eye at ~20 cm distance with basic alignment guidance.</li>
+                        <li><strong class="text-blue-400">Data Handling:</strong> Prototype assumes local processing and secure storage of summaries in Firestore.</li>
+                    </ul>
+                </div>
+                <div class="glass p-8 rounded-3xl text-center">
+                    <i class="fas fa-microchip text-purple-500 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-3 uppercase text-xs tracking-widest">Model / Architecture</h3>
+                    <ul class="text-sm text-slate-400 space-y-2 text-left">
+                        <li><strong class="text-purple-400">U‑Net:</strong> Pupil segmentation network (Dice ≈ 0.87 on synthetic dataset).</li>
+                        <li><strong class="text-purple-400">MNIST CNN:</strong> Classification model used to validate the ML training/inference pipeline (97.2% accuracy).</li>
+                        <li><strong class="text-purple-400">Regression:</strong> Baseline refraction regressor (MAE ≈ 0.18D) for comparison.</li>
+                        <li><strong class="text-purple-400">1D CNN:</strong> Temporal model over 30‑frame sequences (MAE ≈ 0.14D).</li>
+                        <li><strong class="text-purple-400">Optics:</strong> 0.37 constant for pixel–diopter mapping and simulated multi‑meridian averaging.</li>
+                    </ul>
+                </div>
+                <div class="glass p-8 rounded-3xl text-center border-2 border-green-500/20 bg-green-500/5">
+                    <i class="fab fa-python text-green-500 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-4 uppercase text-xs tracking-widest text-green-400">Tech Stack</h3>
+                    <ul class="text-xs text-slate-400 space-y-2 text-left mb-4">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Flutter (cross‑platform mobile app).</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>TensorFlow / Keras + TFLite for on‑device inference.</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Flask REST API backend (Python).</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Firebase Auth + Firestore for auth and history.</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>OpenCV, NumPy, Pandas for image and data processing.</li>
+                    </ul>
+                    <a href="https://github.com/Cpp-ete/AccuVision"
+                         target="_blank" rel="noopener"
+                        class="px-6 py-2 bg-green-600 rounded-full text-[10px] font-black hover:bg-green-500 transition shadow-lg shadow-green-900/40 inline-block">
+                        VIEW CODE / DEMO
+                    </a>
+                </div>
+            </div>
+
+            <div class="glass p-8 rounded-3xl mt-8">
+                <h3 class="text-amber-400 font-bold text-sm uppercase tracking-widest mb-4 text-center">
+                    <i class="fas fa-play-circle mr-2"></i>Live Execution Flow
+                </h3>
+                <ol class="text-sm text-slate-400 space-y-3 max-w-4xl mx-auto">
+                    <li><strong class="text-white">1. User Onboarding:</strong> User logs in via Firebase Auth and receives brief positioning instructions and device calibration info.</li>
+                    <li><strong class="text-white">2. Image Capture:</strong> Camera captures 3–5 eye frames with real‑time feedback on lighting and alignment.</li>
+                    <li><strong class="text-white">3. On‑Device Processing:</strong> TFLite U‑Net segments the pupil, features are extracted, then passed through the optics model and 1D‑CNN.</li>
+                    <li><strong class="text-white">4. Result Display:</strong> App shows estimated spherical equivalent (e.g., −2.25D) with a confidence score and interpretation text.</li>
+                    <li><strong class="text-white">5. History Tracking:</strong> Summarised results and metadata are stored in Firestore; trends can be viewed in the app.</li>
+                    <li><strong class="text-white">6. Professional Referral:</strong> Based on screening results, the app suggests booking a comprehensive eye examination.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section id="results" class="glass p-12 rounded-[3.5rem] border-t-4 border-blue-500">
+            <h2 class="text-3xl font-black mb-12 text-center uppercase tracking-tight">
+                Results & <span class="text-blue-500">Analysis</span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="h-80">
+                    <canvas id="resultsChart"></canvas>
+                </div>
+                <div class="space-y-6">
+                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
+                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">U‑Net Dice Score</span>
+                        <span class="text-blue-400 font-mono font-black text-3xl">87.0%</span>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
+                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">MNIST Accuracy</span>
+                        <span class="text-purple-400 font-mono font-black text-3xl">97.2%</span>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
+                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">1D CNN MAE</span>
+                        <span class="text-green-400 font-mono font-black text-3xl">0.14D</span>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
+                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">Noise Reduction</span>
+                        <span class="text-amber-400 font-mono font-black text-3xl">~50%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 grid md:grid-cols-2 gap-8">
+                <div class="glass p-6 rounded-2xl border-l-4 border-green-500">
+                    <h3 class="text-green-400 font-bold text-xs uppercase tracking-widest mb-3">
+                        <i class="fas fa-check-circle mr-2"></i>Key Achievements
+                    </h3>
+                    <ul class="text-sm text-slate-400 space-y-2">
+                        <li>✓ Target ±0.25D accuracy achieved in internal simulations (not yet clinically validated).</li>
+                        <li>✓ 1D‑CNN reduces MAE compared to the regression baseline (0.14D vs 0.18D).</li>
+                        <li>✓ Multi‑meridian fusion cuts simulated noise variance by about half.</li>
+                        <li>✓ All core models converted to TFLite with significantly reduced size.</li>
+                        <li>✓ End‑to‑end pipeline from camera capture to cloud history implemented.</li>
+                    </ul>
+                </div>
+                <div class="glass p-6 rounded-2xl border-l-4 border-amber-500">
+                    <h3 class="text-amber-400 font-bold text-xs uppercase tracking-widest mb-3">
+                        <i class="fas fa-road mr-2"></i>Next Steps: Phase 0
+                    </h3>
+                    <ul class="text-sm text-slate-400 space-y-2">
+                        <li>→ Conduct clinical pilot study with 50–100 volunteers comparing against an autorefractor.</li>
+                        <li>→ Collect real‑world datasets and retrain/validate all models.</li>
+                        <li>→ Finalise regulatory documentation and prepare for DCGI submission.</li>
+                        <li>→ Maintain Design History File and risk analysis (20+ identified hazards).</li>
+                        <li>→ Implement ethics board approval and informed consent workflows.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 p-6 bg-red-500/10 border-l-4 border-red-500 rounded-2xl">
+                <p class="text-sm text-slate-400 italic">
+                    <strong class="text-red-400">Limitations:</strong>
+                    Current accuracy estimates are based on synthetic and engineering data and assume ideal conditions
+                    (good lighting, stable positioning, fixed distance). Astigmatism and higher‑order aberrations are not
+                    modelled (spherical equivalent only). Clinical validation is pending, and the prototype is not suitable
+                    for paediatric or complex ocular pathology use cases.
+                </p>
+            </div>
+        </section>
+
+        <!-- TEAM -->
+        <section id="team" class="text-center pt-10 border-t border-slate-900">
+            <h2 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] mb-12">
+                Academic Credits
+            </h2>
+            <div class="flex flex-wrap justify-center gap-10">
+                <div class="glass px-12 py-8 rounded-[2rem] border-b-4 border-blue-600">
+                    <p class="text-[9px] font-bold text-blue-500 mb-2 uppercase tracking-widest">Project Guide</p>
+                    <p class="font-black text-xl text-slate-100">Dr. AJAY KUMAR</p>
+                    <p class="text-[10px] text-slate-500 mt-1">Assistant Professor, CSE</p>
+                </div>
+                <div class="glass px-12 py-8 rounded-[2rem] border-b-4 border-slate-700">
+                    <p class="text-[9px] font-bold text-slate-400 mb-2 uppercase tracking-widest">Student Developer</p>
+                    <p class="font-black text-xl text-slate-100">CHAITANYA GOEL | SHAURYA SINGH</p>
+                    <p class="text-[10px] text-slate-500 mt-1">CSE2427030330 | CSE2427030357</p>
+                </div>
+            </div>
+            <div class="mt-12 text-center">
+                <p class="text-xs text-slate-600 uppercase tracking-widest mb-3">Technologies Used</p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <span class="px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full text-blue-400 text-xs font-semibold">TensorFlow</span>
+                    <span class="px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 text-xs font-semibold">Flutter</span>
+                    <span class="px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-xs font-semibold">Firebase</span>
+                    <span class="px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold">OpenCV</span>
+                    <span class="px-4 py-2 bg-pink-500/10 border border-pink-500/30 rounded-full text-pink-400 text-xs font-semibold">Flask</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-12 text-center bg-black/40 border-t border-slate-900">
+        <p class="text-slate-600 text-[10px] font-bold tracking-[0.3em] uppercase mb-2">
+            Manipal University Jaipur
+        </p>
+        <p class="text-slate-500 text-[9px] font-medium tracking-[0.2em] uppercase opacity-50">
+            Department of Computer Science & Engineering • PBL 2026
+        </p>
+        <p class="text-slate-700 text-[8px] mt-4 italic">
+            AccuVision v0.1.0-pre-dev | Academic Project Prototype
+        </p>
+    </footer>
+
+    <script>
+        // TIMER LOGIC
+        let sec = 0;
+        let timer = null;
+
+        function startTimer() {
+            timer = setInterval(() => {
+                sec++;
+                const m = Math.floor(sec / 60);
+                const s = sec % 60;
+                const display = document.getElementById('displayTime');
+                const container = document.getElementById('timerContainer');
+                const icon = document.getElementById('timerIcon');
+                if (!display || !container || !icon) return;
+
+                display.innerText =
+                    m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+
+                if (sec >= 480 && sec < 600) { // 8–10 min warning
+                    container.classList.add('timer-warning');
+                    icon.classList.replace('fa-hourglass-start', 'fa-hourglass-half');
+                } else if (sec >= 600) { // 10 min stop
+                    clearInterval(timer);
+                    container.classList.remove('timer-warning');
+                    container.classList.add('timer-stop');
+                    display.innerText = '10:00';
+                    icon.classList.replace('fa-hourglass-half', 'fa-hourglass-end');
+                }
+            }, 1000);
+        }
+
+        // Start when DOM is ready (safer than body onload)
+        document.addEventListener('DOMContentLoaded', () => {
+            startTimer();
+        });
+
+        // RESULTS CHART (keep as you had it)
+        const canvas = document.getElementById('resultsChart');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Optics Baseline', 'Regression Model', '1D CNN Temporal', 'Target Goal'],
+                    datasets: [{
+                        label: 'MAE (Diopters)',
+                        data: [0.71, 0.18, 0.14, 0.25],
+                        backgroundColor: ['#1e293b', '#3b82f6', '#10b981', '#a855f7'],
+                        borderRadius: 12,
+                        barThickness: 60
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return 'MAE: ' + context.parsed.y + 'D';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 0.8,
+                            grid: { color: '#ffffff05' },
+                            ticks: {
+                                color: '#94a3b8',
+                                callback: function (value) {
+                                    return value.toFixed(2) + 'D';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Mean Absolute Error (Lower is Better)',
+                                color: '#64748b',
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
